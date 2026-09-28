@@ -1,1 +1,0 @@
-/obj/item/wire_cutters : /obj/item/wirecutters{@OLD}

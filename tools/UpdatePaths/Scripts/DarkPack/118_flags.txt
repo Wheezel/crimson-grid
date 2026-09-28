@@ -1,1 +1,0 @@
-/obj/flag/@SUBTYPES : /obj/structure/sign/flag/@SUBTYPES {@OLD}

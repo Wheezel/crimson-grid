@@ -1,0 +1,21 @@
+{
+  "source_commit": "75c11f5496d4b691fc71c74186dd843ba07f436b",
+  "maps": 3,
+  "layers": 18,
+  "transition_markers": 744,
+  "directed_links_tested": 727,
+  "maximum_alignment_error_pixels": 0,
+  "one_way_arrival_markers": 47,
+  "unresolved_transfer_ids": 0,
+  "browser_runtime_errors": 0,
+  "checks": [
+    "Real marker click changes to its paired destination",
+    "Back restores previous level, coordinates and zoom",
+    "All directed links retain exact source screen position and zoom",
+    "Named area search and selection",
+    "URL fragment restores map and viewport after reload",
+    "Mobile viewport has no horizontal overflow",
+    "All layer overviews and detail tiles exist",
+    "Site serves correctly under a repository subpath"
+  ]
+}

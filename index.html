@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10151d">
+<title>Crimson Grid — Interactive Atlas</title>
+<meta name="description" content="Explore Crimson Grid's maps, named areas and linked z-level transitions. Click stairs, manholes and transfer points without losing your place.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310151d'/%3E%3Cpath d='M7 7h8v8H7zm10 10h8v8h-8z' fill='%23e65368'/%3E%3Cpath d='M17 7h8v8h-8zM7 17h8v8H7z' fill='%2361d8c1'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+<script defer src="data.js"></script><script defer src="app.js"></script>
+</head>
+<body>
+<header><button id="menu" class="icon mobile" aria-label="Open map controls" aria-expanded="false">☰</button><span class="brand-icon" aria-hidden="true">▦</span><div class="brand"><strong>CRIMSON GRID</strong><span>INTERACTIVE ATLAS</span></div><span class="header-rule"></span><span id="current-map">Loading map…</span><a id="source" href="https://github.com/Wheezel/crimson-grid" target="_blank" rel="noopener">Map source ↗</a></header>
+<div class="workspace">
+<aside id="sidebar">
+<section class="map-selector"><label for="map-select">MAP</label><select id="map-select"></select></section>
+<section><div class="section-head"><h2>Layers</h2><span id="layer-count"></span></div><div id="levels" role="group" aria-label="Map layers"></div></section>
+<section class="directory"><div class="section-head"><h2>Named areas</h2><span id="area-count"></span></div><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Find an area…" aria-label="Find a named area"></label><div id="areas"></div></section>
+<section class="sidebar-foot"><label class="check"><input id="labels-toggle" type="checkbox" checked> Area labels</label><label class="check"><input id="links-toggle" type="checkbox" checked> Transition markers</label><button id="about" class="text-button">Map notes & controls</button><span id="revision"></span></section>
+</aside>
+<main id="map-view" aria-label="Interactive map">
+<canvas id="map-canvas" tabindex="0" aria-label="Map. Drag to pan, scroll to zoom, or use arrow keys to pan. Use the visible transitions button for keyboard navigation."></canvas>
+<div class="map-top"><div class="toolbar"><button id="back" title="Return to previous view (Alt+Left)" disabled>← Back</button><button id="fit" title="Fit this map layer (F)">Fit layer</button></div><span id="layer-badge"></span></div>
+<div id="zoom-controls"><button id="zoom-in" aria-label="Zoom in">+</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="visible-links" title="List transitions in this view">⇄<span>Links</span></button></div>
+<div id="hint">Click a transition to follow it. Your zoom and screen position stay aligned.</div>
+<div id="tooltip" role="tooltip" hidden></div>
+<div id="destination-panel" hidden><div class="panel-heading"><strong id="destination-title"></strong><button id="close-destination" aria-label="Close destinations">×</button></div><div id="destination-list"></div></div>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+<div id="load-error" hidden>Some map tiles failed to load. <button id="retry">Retry</button></div>
+<footer><div class="legend"><span><i class="stairs"></i>Stairs</span><span><i class="ladder"></i>Ladders / manholes</span><span><i class="portal"></i>Transfers</span><span><i class="elevator"></i>Elevators</span></div><div id="position">Map coordinates</div><div id="scale"></div></footer>
+</main>
+</div>
+<dialog id="notes"><div class="panel-heading"><h2>Map notes & controls</h2><button id="close-notes" aria-label="Close notes">×</button></div><p>This atlas uses the actual map tiles and named areas in the Wheezel Crimson Grid fork.</p><ul><li><b>Drag</b> to pan; <b>scroll or pinch</b> to zoom. Arrow keys pan, +/− zoom, F fits the layer.</li><li><b>Click a marker</b> to follow its linked destination. The destination stays at the same screen position, at the same zoom. Use Back to return.</li><li>Elevators and ladders with several destinations show a destination list.</li><li>Manual layer changes preserve your coordinates and zoom.</li><li>Gray markers are one-way exits or unresolved links; the atlas does not invent destinations.</li></ul><p>Labels come from map area definitions. Z numbers and coordinates are local to the map files; the live server can add coordinate offsets. This is a static atlas: locked doors, elevator availability, randomly spawned content and in-round changes are not simulated.</p><p>Stair landings are derived from stair direction, the end of each stair chain, and the next level's turf. Umbra exits retain the source's one-way rules. Elevator links show mapped call stops.</p><p id="source-detail"></p><p>Map artwork: Crimson Grid / DarkPack / tgstation contributors, <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC BY-SA 3.0</a>, except where the source specifies otherwise. See <a href="ATTRIBUTION.md">attribution</a>.</p></dialog>
+<noscript>This interactive map requires JavaScript. Enable JavaScript to view the layers and transitions.</noscript>
+</body></html>

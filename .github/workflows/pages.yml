@@ -1,0 +1,77 @@
+name: Publish Crimson Grid Atlas
+
+on:
+  push:
+    branches: [atlas-pages]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: crimson-grid-atlas-pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install map processing dependencies
+        run: python -m pip install -r tools/requirements.txt
+      - name: Download pinned game source and renderer
+        run: |
+          mkdir -p .build/source .build/renders
+          curl --fail --location --retry 3 \
+            https://codeload.github.com/Wheezel/crimson-grid/tar.gz/75c11f5496d4b691fc71c74186dd843ba07f436b \
+            --output .build/source.tar.gz
+          tar -xzf .build/source.tar.gz --strip-components=1 -C .build/source
+          curl --fail --location --retry 3 \
+            https://github.com/SpaceManiac/SpacemanDMM/releases/download/suite-1.12/dmm-tools \
+            --output .build/dmm-tools
+          echo '9476d0b2a823d1adea852cdaf90c313ff0193eac50e5ddda824f823e123e10c7  .build/dmm-tools' | sha256sum --check
+          chmod +x .build/dmm-tools
+      - name: Render all 18 map layers
+        working-directory: .build/source
+        run: |
+          ../dmm-tools --jobs 3 -e tgstation.dme minimap -o ../renders \
+            _maps/map_files/Vampire/oakland/bomby_oakland.dmm \
+            _maps/map_files/Vampire/oakland/oakland_umbra.dmm \
+            _maps/map_files/Vampire/san_fangsisco/sanfangsisco.dmm \
+            _maps/map_files/Vampire/san_fangsisco/sanfangsisco_umbra.dmm \
+            _maps/map_files/Vampire/westfield_mall/westfield_mall.dmm \
+            _maps/map_files/Vampire/westfield_mall/westfield_umbra.dmm
+      - name: Extract named areas and transition links
+        run: |
+          python tools/build_data.py .build/source \
+            --commit 75c11f5496d4b691fc71c74186dd843ba07f436b \
+            --snapshot-date 2026-09-27
+          python tools/build_tiles.py .build/renders
+          python tools/verify_build.py
+      - name: Assemble website
+        run: |
+          mkdir _site
+          cp index.html app.js style.css data.js ATTRIBUTION.md LICENSE transition-audit.json .nojekyll _site/
+          cp -R assets _site/assets
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Publish map
+        id: deployment
+        uses: actions/deploy-pages@v4

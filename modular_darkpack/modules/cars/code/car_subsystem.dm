@@ -1,6 +1,0 @@
-PROCESSING_SUBSYSTEM_DEF(carpool)
-	name = "Car Pool"
-	ss_flags = SS_POST_FIRE_TIMING|SS_NO_INIT
-	priority = FIRE_PRIORITY_OBJ
-	runlevels = RUNLEVEL_GAME | RUNLEVEL_POSTGAME
-	wait = 0.5 SECONDS

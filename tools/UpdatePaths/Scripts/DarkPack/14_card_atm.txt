@@ -1,4 +1,0 @@
-/obj/machinery/vamp/atm : /obj/machinery/atm {@OLD}
-
-/obj/item/vamp/creditcard : /obj/item/card/credit {@OLD}
-/obj/item/vamp/creditcard/@SUBTYPES : /obj/item/card/credit/@SUBTYPES {@OLD}
